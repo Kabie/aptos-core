@@ -1,7 +1,7 @@
 // Copyright (c) Aptos
 // SPDX-License-Identifier: Apache-2.0
 
-use crate::vm_validator::{TransactionValidation, VMValidator};
+use crate::vm_validator::{get_account_sequence_number, TransactionValidation, VMValidator};
 use aptos_crypto::{ed25519::Ed25519PrivateKey, PrivateKey, Uniform};
 use aptos_transaction_builder::aptos_stdlib::{
     encode_mint_script_function, encode_transfer_script_function,
@@ -16,8 +16,12 @@ use aptos_types::{
 };
 use aptos_vm::AptosVM;
 use aptosdb::AptosDB;
-use move_core_types::gas_schedule::{GasAlgebra, GasConstants, MAX_TRANSACTION_SIZE_IN_BYTES};
+use move_core_types::{
+    account_address::AccountAddress,
+    gas_schedule::{GasAlgebra, GasConstants, MAX_TRANSACTION_SIZE_IN_BYTES},
+};
 use rand::SeedableRng;
+use std::ops::Deref;
 use storage_interface::DbReaderWriter;
 
 struct TestValidator {
@@ -196,6 +200,33 @@ fn test_validate_max_gas_units_below_min() {
     assert_eq!(
         ret.status().unwrap(),
         StatusCode::MAX_GAS_UNITS_BELOW_MIN_TRANSACTION_GAS_UNITS
+    );
+    let x = get_account_sequence_number(
+        vm_validator.vm_validator.db_reader.deref(),
+        AccountAddress::new([0u8; AccountAddress::LENGTH]),
+    )
+    .unwrap();
+    print!("x is {:?}", x);
+}
+
+#[test]
+fn test_get_account_sequence_number() {
+    let vm_validator = TestValidator::new();
+    let root_address = account_config::aptos_root_address();
+    assert_eq!(
+        get_account_sequence_number(vm_validator.vm_validator.db_reader.deref(), root_address,)
+            .unwrap()
+            .min_seq(),
+        0
+    );
+    assert_eq!(
+        get_account_sequence_number(
+            vm_validator.vm_validator.db_reader.deref(),
+            AccountAddress::new([5u8; AccountAddress::LENGTH]),
+        )
+        .unwrap()
+        .min_seq(),
+        0
     );
 }
 

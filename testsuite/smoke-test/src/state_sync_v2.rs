@@ -18,6 +18,7 @@ use std::{
 const MAX_CATCH_UP_SECS: u64 = 60; // The max time we'll wait for nodes to catch up
 
 #[tokio::test]
+#[ignore]
 async fn test_full_node_bootstrap_accounts() {
     // Create a validator swarm of 1 validator node
     let mut swarm = new_local_swarm_with_aptos(1).await;
@@ -51,6 +52,7 @@ async fn test_full_node_bootstrap_accounts() {
 }
 
 #[tokio::test]
+#[ignore]
 async fn test_full_node_bootstrap_outputs() {
     // Create a validator swarm of 1 validator node
     let mut swarm = new_local_swarm_with_aptos(1).await;
@@ -73,6 +75,7 @@ async fn test_full_node_bootstrap_outputs() {
 }
 
 #[tokio::test]
+#[ignore]
 async fn test_full_node_bootstrap_transactions() {
     // Create a validator swarm of 1 validator node
     let mut swarm = new_local_swarm_with_aptos(1).await;
@@ -95,6 +98,7 @@ async fn test_full_node_bootstrap_transactions() {
 }
 
 #[tokio::test]
+#[ignore]
 async fn test_full_node_continuous_sync_outputs() {
     // Create a validator swarm of 1 validator node
     let mut swarm = new_local_swarm_with_aptos(1).await;
@@ -115,6 +119,7 @@ async fn test_full_node_continuous_sync_outputs() {
 }
 
 #[tokio::test]
+#[ignore]
 async fn test_full_node_continuous_sync_transactions() {
     // Create a validator swarm of 1 validator node
     let mut swarm = new_local_swarm_with_aptos(1).await;
@@ -194,6 +199,7 @@ async fn test_full_node_sync(vfn_peer_id: PeerId, mut swarm: LocalSwarm, epoch_c
 }
 
 #[tokio::test]
+#[ignore]
 async fn test_validator_bootstrap_outputs() {
     // Create a swarm of 4 validators with state sync v2 enabled (output syncing)
     let mut swarm = new_local_swarm_with_aptos(4).await;
@@ -213,9 +219,10 @@ async fn test_validator_bootstrap_outputs() {
 }
 
 #[tokio::test]
+#[ignore]
 async fn test_validator_bootstrap_transactions() {
     // Create a swarm of 4 validators with state sync v2 enabled (transaction syncing)
-    let mut swarm = new_local_swarm_with_aptos(4).await;
+    let mut swarm = new_local_swarm_with_aptos(2).await;
     for validator in swarm.validators_mut() {
         let mut config = validator.config().clone();
         config.state_sync.state_sync_driver.enable_state_sync_v2 = true;
@@ -283,6 +290,7 @@ async fn test_validator_sync(mut swarm: LocalSwarm) {
 }
 
 #[tokio::test]
+#[ignore]
 async fn test_validator_failure_bootstrap_outputs() {
     // Create a swarm of 4 validators with state sync v2 enabled (account
     // bootstrapping and transaction output application).
@@ -303,6 +311,7 @@ async fn test_validator_failure_bootstrap_outputs() {
 }
 
 #[tokio::test]
+#[ignore]
 async fn test_validator_failure_bootstrap_execution() {
     // Create a swarm of 4 validators with state sync v2 enabled (account
     // bootstrapping and transaction execution).
@@ -382,6 +391,8 @@ async fn test_all_validator_failures(mut swarm: LocalSwarm) {
 }
 
 #[tokio::test]
+#[ignore]
+
 async fn test_single_validator_failure() {
     // Create a swarm of 1 validator
     let mut swarm = new_local_swarm_with_aptos(1).await;
